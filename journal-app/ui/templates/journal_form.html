@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Journal Entry{% endblock %}
+{% block content %}
+<h1 class="title">{{ action }} Journal Entry</h1>
+<form method="POST">
+  <div class="field">
+    <label class="label">Content</label>
+    <div class="control">
+      <textarea class="textarea" name="content" required>{% if entry %}{{ entry.content }}{% endif %}</textarea>
+    </div>
+  </div>
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button is-link" type="submit">Create</button>
+    </div>
+    <div class="control">
+      <a class="button is-light" href="{{ url_for('index') }}">Cancel</a>
+    </div>
+  </div>
+</form>
+{% endblock %} 

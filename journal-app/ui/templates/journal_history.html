@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Journal History{% endblock %}
+{% block content %}
+<h1 class="title">Journal History</h1>
+<div class="mb-4">
+  <a class="button is-primary" href="{{ url_for('new_entry') }}">New Entry</a>
+</div>
+<ul>
+  {% for entry in entries %}
+  <li style="margin-bottom: 10px;" class="is-family-sans-serif">
+    <div class="box">
+      <article class="media">
+        <div class="media-left">
+          <strong>{{ entry.timestamp|format_datetime }}</strong>
+        </div>
+        <div class="media-content">
+          <div class="content">
+            {{ entry.content }}
+          </div>
+          <nav class="level is-mobile">
+            <div class="level-left">
+              <a href="{{ url_for('edit_entry', entry_id=entry.id) }}" class="level-item button is-small is-link" aria-label="Edit">
+                <span class="icon is-small"><i class="fas fa-edit"></i></span>
+                <span>Edit</span>
+              </a>
+              <form class="level-item" style="margin-left: 5px;" aria-label="Delete" method="POST" action="{{ url_for('delete_entry', entry_id=entry.id) }}">
+                <button class="button is-small is-danger" type="submit">
+                  <span class="icon is-small"><i class="fas fa-trash-alt"></i></span>
+                  <span>Delete</span>
+                </button>
+              </form>
+            </div>
+          </nav>
+        </div>
+      </article>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %} 

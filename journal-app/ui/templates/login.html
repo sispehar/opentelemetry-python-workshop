@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="columns is-centered">
+  <div class="column is-half">
+    <h1 class="title has-text-centered">Login</h1>
+    <form method="POST">
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control">
+          <input class="input" type="text" name="username" required>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+          <input class="input" type="password" name="password" required>
+        </div>
+      </div>
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <button class="button is-link" type="submit" id="login-button">Login</button>
+        </div>
+      </div>
+    </form>
+    <p class="has-text-centered">Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
+    <p class="has-text-grey is-size-7 has-text-centered" style="margin-top: 1em;">
+      Default credentials: <strong>seneca</strong> / <strong>mementomori</strong>
+    </p>
+  </div>
+</div>
+<script>
+  // Add is-loading class to the login button when the form is submitted
+  var loginForm = document.querySelector('form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', function() {
+      var loginBtn = document.getElementById('login-button');
+      if (loginBtn) {
+        loginBtn.classList.add('is-loading');
+      }
+    });
+  }
+</script>
+{% endblock %} 

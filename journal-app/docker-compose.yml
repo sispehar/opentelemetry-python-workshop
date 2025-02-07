@@ -1,0 +1,36 @@
+
+services:
+  ui:
+    build: ./ui
+    ports:
+      - "5000:5000"
+    depends_on:
+      - auth
+      - journal
+      - quote
+    volumes:
+      - data-volume:/data
+
+  auth:
+    build: ./auth
+    volumes:
+      - data-volume:/data
+    expose:
+      - "5001"
+
+  journal:
+    build: ./journal
+    volumes:
+      - data-volume:/data
+    expose:
+      - "5002"
+
+  quote:
+    build: ./quote
+    volumes:
+      - data-volume:/data
+    expose:
+      - "5003"
+
+volumes:
+  data-volume: 

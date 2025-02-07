@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1 class="title is-capitalized">Welcome, {{ current_user.username }}!</h1>
+<button id="quote-refresh" class="button is-outlined mb-4">Get Another Quote</button>
+<article class="message is-medium">
+  <div class="message-body">
+    <p id="quote-content">"{{ quote.content }}"</p>
+    {% if quote.author %}
+    <p id="quote-author"><em>- {{ quote.author }}</em></p>
+    {% else %}
+    <p id="quote-author"></p>
+    {% endif %}
+  </div>
+</article>
+
+  <h2 class="subtitle has-text-weight-medium">Your Recent Journal Entries</h2>
+  <div class="mb-4 has-text-left">
+    <a class="button is-primary" href="{{ url_for('new_entry') }}">New Entry</a>
+    <a class="button is-info" href="{{ url_for('journal_history') }}">Full History</a>
+  </div>
+  <ul>
+    {% for entry in entries[:3] %}
+    <li style="margin-bottom: 10px;" class="is-family-sans-serif">
+      <div class="box">
+        <article class="media">
+          <div class="media-left">
+            <strong>{{ entry.timestamp|format_datetime }}</strong> 
+          </div>
+          <div class="media-content">
+            <div class="content">
+              {{ entry.content }}
+            </div>
+            <nav class="level is-mobile">
+              <div class="level-left">
+                <a href="{{ url_for('edit_entry', entry_id=entry.id) }}" class="level-item button is-small is-link" aria-label="Edit">
+                  <span class="icon is-small"><i class="fas fa-edit"></i></span>
+                  <span>Edit</span>
+                </a>
+                <form class="level-item" style="margin-left: 5px;" aria-label="Delete" method="POST" action="{{ url_for('delete_entry', entry_id=entry.id) }}">
+                  <button class="button is-small is-danger" type="submit">
+                    <span class="icon is-small"><i class="fas fa-trash-alt"></i></span>
+                    <span>Delete</span>
+                  </button>
+                </form>
+              </div>
+            </nav>
+        </div>
+    </article>
+    </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% if entries|length > 3 %}
+  <p class="has-text-centered mt-4">
+    <a class="button is-info is-light" href="{{ url_for('journal_history') }}">View Full History</a>
+  </p>
+  {% endif %}
+<script>
+  document.getElementById('quote-refresh').addEventListener('click', function(event) {
+    event.preventDefault();
+    var refreshBtn = this;
+    // add is-loading class to the button
+    refreshBtn.classList.add("is-loading");
+    fetch("{{ url_for('quote_json') }}")
+      .then(function(response) { return response.json(); })
+      .then(function(data) {
+        if(data.error) {
+           // Optionally display error message (here using an alert)
+           alert(data.error);
+        } else {
+           document.getElementById('quote-content').innerText = '"' + data.content + '"';
+           var authorElem = document.getElementById('quote-author');
+           if(data.author) {
+             authorElem.innerHTML = "<em>- " + data.author + "</em>";
+           } else {
+             authorElem.innerText = "";
+           }
+        }
+      })
+      .catch(function(error) {
+        console.error("Error refreshing quote:", error);
+        alert("Error refreshing quote");
+      })
+      .finally(function() {
+        // remove is-loading class when done
+        refreshBtn.classList.remove("is-loading");
+      });
+  });
+</script>
+{% endblock %} 

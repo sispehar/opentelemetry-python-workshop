@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<h1 class="title">Profile: {{ user.username }}</h1>
+
+<div class="card">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img
+              src="https://bulma.io/assets/images/placeholders/96x96.png"
+              alt="Placeholder image"
+            />
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-4">{{ user.username }}</p>
+          <p class="subtitle is-6">You have {{ entry_count }} journal entries.</p>
+        </div>
+      </div>
+  
+      <div class="content">
+        Luck is what happens when preparation meets opportunity.
+        <a href="#">#motivational</a>
+      </div>
+    </div>
+  </div>
+
+{% endblock %} 
