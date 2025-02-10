@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import random
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////data/app.db'
@@ -42,6 +43,10 @@ def add_entry():
         return jsonify({'error': 'user_id and content are required'}), 400
     entry = JournalEntry(user_id=user_id, content=content)
     db.session.add(entry)
+    # Simulate a DB commit failure with a 20% probability
+    if random.random() < 0.2:
+        db.session.rollback()
+        return jsonify({'error': 'DB commit failure while adding entry'}), 500
     db.session.commit()
     return jsonify({'message': 'Entry added', 'entry_id': entry.id})
 

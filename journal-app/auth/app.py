@@ -39,6 +39,10 @@ def register():
     
     user = User(username=username, password_hash=generate_password_hash(password))
     db.session.add(user)
+    # Simulate a DB commit failure with a 20% probability
+    if random.random() < 0.2:
+        db.session.rollback()
+        return jsonify({'error': 'DB commit failure'}), 500
     db.session.commit()
     return jsonify({'message': 'User registered successfully', 'user_id': user.id})
 
